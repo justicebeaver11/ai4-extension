@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "AI4Chat",
+  "version": "2.0",
+  "permissions": [
+    "cookies",
+    "storage",
+    "tabs",
+    "webNavigation",
+    "activeTab",
+    "commands"
+    
+  ],
+  "host_permissions": [
+    "https://app.ai4chat.co/*",
+    "http://localhost:3000/*",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "open_movable_popup": {
+      "suggested_key": {
+        "default": "Ctrl+Space"
+      },
+      "description": "Open the extension popup"
+    }
+  },
+  "action": {
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

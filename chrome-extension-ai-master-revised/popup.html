@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="popup.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <title>AI4Chat</title>
+    <style>
+      body {
+        width: 500px;
+        height: 600px;
+        margin: 0;
+        padding: 0;
+        background-color: #000319;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <button id="closeButton">&times;</button>
+      <h1 id="welcome">Welcome Back!</h1>
+      <p id="instruction">Sign in to continue</p>
+      <div id="loginButtonContainer">
+        <button id="loginButton">Sign In</button>
+      </div>
+    </div>
+    <div id="selectionContainer">
+      <button class="button-box" id="chatWithChatbot">
+        <i class="fa-solid fa-robot"></i>Chat with Chatbot
+      </button>
+      <button class="button-box" id="chatWithWebpage">
+        <i class="fa-solid fa-globe"></i>Chat with Webpage
+      </button>
+    </div>
+    <div id="chatbotContainer" style="display: none">
+      <div id="webpageContainer" style="display: none">
+        <!-- Webpage Chat Interface Goes Here -->
+        <div id="webpageOptionsPopup" class="popup hidden">
+          <div id="webpageOptions">
+            <button id="closePopupButton">&times;</button>
+
+            <input
+              type="text"
+              id="urlInput"
+              placeholder="Enter the webpage URL"
+            />
+            <button id="fetchContentButton">Continue</button>
+
+            <!-- <button id="retreiveUrl">Current Webpage as Context</button> -->
+          </div>
+          <div id="retrieveUrlContainer">
+            <button id="retrieveUrlButton">
+              Retrieve URL of the Current Tab
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="header">
+        <div id="dropdownContainer">
+          <button id="dropdownButton" class="icon-button">
+            <img src="icon1.png" alt="Icon" class="icon-image" />
+            <span class="arrow">&#9660;</span>
+          </button>
+
+          <div id="advancedContainer">
+            <button id="settingsButton" class="icon-button">
+              <i class="fa fa-gear"></i>
+              <div class="tooltip">Advanced Settings</div>
+              <i class="fas fa-caret-down" id="caretIcon"></i>
+            </button>
+            <div id="caretDropdown" class="dropdown-content">
+              <a href="#" id="langButton" class="lang-change-button"
+                ><span class="lang-text"> Language: English </span>
+                <i class="fa-solid fa-chevron-right" id="langChange"></i
+              ></a>
+              <a href="#" id="wordCountButton" class="word-count-button"
+                ><span class="word-count-text">Word Count: Default</span>
+                <i class="fa-solid fa-sliders" id="sliderAdjust"></i
+              ></a>
+              <a href="#" id="toneButton" class="volume-up-button"
+                ><span class="tone-text"> Tone: Default</span>
+                <i class="fas fa-volume-up" id="volumeUp"></i
+              ></a>
+            </div>
+          </div>
+          <div id="searchBox">
+            <i class="fas fa-search"></i>
+          </div>
+        </div>
+
+        <div id="headerButtons">
+          <button id="openNewTabButton" class="icon-button">
+            <i class="fa fa-plus"></i>
+            <div class="tooltip">Open a new chat</div>
+          </button>
+
+          <button id="settingsMenuButton" class="icon-button">
+            <i class="fa-solid fa-bars" id="barIcon"></i>
+            <div class="tooltip">Menu</div>
+          </button>
+          <div id="caretDropdownMenu" class="dropdown-content-new">
+            <a href="#" id="menuButton" class="menu-Button"
+              ><span class="text-image"> Text to Image </span>
+              <i class="fa-solid fa-image" id="textImage"></i
+            ></a>
+            <a href="#" id="youtubeChat" class="youtube-Button"
+              ><span class="youtube-chat">Youtube Chat</span>
+              <i class="fa-brands fa-youtube" id="youtubechat"></i
+            ></a>
+            <a href="#" id="googleDocs" class="google-button"
+              ><span class="google-doc"> Google Doc</span>
+              <i class="fa-solid fa-file" id="googledoc"></i
+            ></a>
+          </div>
+
+          <button id="closeChatButton" class="icon-button">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+      <div id="chatbotmodel">
+        <div id="modelSelector">
+          <button id="modelButton">
+            <i class="fas fa-bolt"></i>
+            <span id="selectedModel">Current Model</span>
+            <i class="fas fa-caret-down" id="caretIcon"></i>
+          </button>
+          <div id="modelDropdown" class="dropdown-content">
+            <a href="#" data-model="ChatGPT by OpenAI">ChatGPT by OpenAI</a>
+            <a href="#" data-model="ChatGPT (GPT 3.5)">ChatGPT (GPT 3.5)</a>
+            <a href="#" data-model="GPT 4o">GPT 4o</a>
+            <a href="#" data-model="GPT 4o Mini">GPT 4o Mini</a>
+            <a href="#" data-model="Gemini 1.0 Pro">Gemini 1.0 Pro</a>
+            <a href="#" data-model="Gemini 1.5 Pro">Gemini 1.5 Pro</a>
+            <a href="#" data-model="Gemini 1.5 Flash">Gemini 1.5 Flash</a>
+            <a href="#" data-model="Gemma 7B">Gemma 7B</a>
+            <a href="#" data-model="Gemma 2 9B">Gemma 2 9B</a>
+            <a href="#" data-model="Gemma 2 7B">Gemma 2 7B</a>
+            <a href="#" data-model="Claude Instant v1">Claude Instant v1</a>
+            <a href="#" data-model="Claude v2.0">Claude v2.0</a>
+            <a href="#" data-model="Claude v2.1">Claude v2.1</a>
+            <a href="#" data-model="Claude 3 Haiku">Claude 3 Haiku</a>
+            <a href="#" data-model="Claude 3 Sonnet">Claude 3 Sonnet</a>
+            <a href="#" data-model="Claude 3 Opus">Claude 3 Opus</a>
+            <a href="#" data-model="Phi-3 Mini Instruct">Phi-3 Mini Instruct</a>
+            <a href="#" data-model="Phi-3.5 Mini 128K Instruct"
+              >Phi-3.5 Mini 128K Instruct</a
+            >
+            <a href="#" data-model="Phi-3 Medium Instruct"
+              >Phi-3 Medium Instruct</a
+            >
+            <a href="#" data-model="WizardLM-2 7B">WizardLM-2 7B</a>
+            <a href="#" data-model="WizardLM-2 8x22B">WizardLM-2 8x22B</a>
+            <a href="#" data-model="Llama v2 13B">Llama v2 13B</a>
+            <a href="#" data-model="Llama v2 70B">Llama v2 70B</a>
+            <a href="#" data-model="Llama v3 8B">Llama v3 8B</a>
+            <a href="#" data-model="Llama v3 70B">Llama v3 70B</a>
+            <a href="#" data-model="Llama v3.1 8B">Llama v3.1 8B</a>
+            <a href="#" data-model="Llama v3.1 70B">Llama v3.1 70B</a>
+            <a href="#" data-model="Llama v3.1 405B">Llama v3.1 405B</a>
+            <a href="#" data-model="CodeLlama 34B">CodeLlama 34B</a>
+            <a href="#" data-model="Command">Command</a>
+            <a href="#" data-model="Command R">Command R</a>
+            <a href="#" data-model="Command R+">Command R+</a>
+            <a href="#" data-model="Mistral 7B Instruct">Mistral 7B Instruct</a>
+            <a href="#" data-model="Mistral 7B Instruct v0.1"
+              >Mistral 7B Instruct v0.1</a
+            >
+            <a href="#" data-model="Mistral 7B Instruct v0.2"
+              >Mistral 7B Instruct v0.2</a
+            >
+            <a href="#" data-model="Mistral 7B Instruct v0.3"
+              >Mistral 7B Instruct v0.3</a
+            >
+            <a href="#" data-model="Mixtral 8x7B Instruct"
+              >Mixtral 8x7B Instruct</a
+            >
+            <a href="#" data-model="Mixtral 8x22B Instruct"
+              >Mixtral 8x22B Instruct</a
+            >
+            <a href="#" data-model="Mistral Nemo">Mistral Nemo</a>
+            <a href="#" data-model="Codestral Mamba">Codestral Mamba</a>
+            <a href="#" data-model="Jamba Instruct">Jamba Instruct</a>
+            <a href="#" data-model="Jamba 1.5 Mini">Jamba 1.5 Mini</a>
+            <a href="#" data-model="Jamba 1.5 Large">Jamba 1.5 Large</a>
+            <a href="#" data-model="Qwen 1.5 4B Chat">Qwen 1.5 4B Chat</a>
+            <a href="#" data-model="Qwen 1.5 7B Chat">Qwen 1.5 7B Chat</a>
+            <a href="#" data-model="Qwen 1.5 72B Chat">Qwen 1.5 72B Chat</a>
+            <a href="#" data-model="Qwen 1.5 110B Chat">Qwen 1.5 110B Chat</a>
+            <a href="#" data-model="Qwen 2 7B">Qwen 2 7B</a>
+            <a href="#" data-model="Qwen 2 72B">Qwen 2 72B</a>
+            <a href="#" data-model="StripedHyena Nous 7B"
+              >StripedHyena Nous 7B</a
+            >
+            <a href="#" data-model="OLMo 7B Instruct">OLMo 7B Instruct</a>
+            <a href="#" data-model="Chronos Hermes 13B v2"
+              >Chronos Hermes 13B v2</a
+            >
+            <a href="#" data-model="DBRX 132B Instruct">DBRX 132B Instruct</a>
+            <a href="#" data-model="DeepSeek-V2 Chat">DeepSeek-V2 Chat</a>
+            <a href="#" data-model="Deepseek Coder">Deepseek Coder</a>
+            <a href="#" data-model="Dolphin 2.6 Mixtral 8x7B"
+              >Dolphin 2.6 Mixtral 8x7B</a
+            >
+            <a href="#" data-model="Dolphin 2.9.2 Mixtral 8x22B"
+              >Dolphin 2.9.2 Mixtral 8x22B</a
+            >
+            <a href="#" data-model="Dolphin Llama 3 70B">Dolphin Llama 3 70B</a>
+            <a href="#" data-model="LLaVA v1.6 34B">LLaVA v1.6 34B</a>
+            <a href="#" data-model="FireLLaVA 13B">FireLLaVA 13B</a>
+            <a href="#" data-model="Llama 3 Lumimaid 8B">Llama 3 Lumimaid 8B</a>
+            <a href="#" data-model="Llama 3 Lumimaid 70B"
+              >Llama 3 Lumimaid 70B</a
+            >
+            <a href="#" data-model="Lynn: Llama 3 Soliloquy 8B v2"
+              >Lynn: Llama 3 Soliloquy 8B v2</a
+            >
+            <a href="#" data-model="lzlv 70B">lzlv 70B</a>
+            <a href="#" data-model="Magnum 72B">Magnum 72B</a>
+            <a href="#" data-model="Midnight Rose 70B">Midnight Rose 70B</a>
+            <a href="#" data-model="MythoMax 13B">MythoMax 13B</a>
+            <a href="#" data-model="MythoMist 7B">MythoMist 7B</a>
+            <a href="#" data-model="Noromaid Mixtral 8x7B Instruct"
+              >Noromaid Mixtral 8x7B Instruct</a
+            >
+            <a href="#" data-model="Noromaid 20B">Noromaid 20B</a>
+            <a href="#" data-model="Hermes 2 Pro - Llama-3 8B"
+              >Hermes 2 Pro - Llama-3 8B</a
+            >
+            <a href="#" data-model="Hermes 2 - Mistral 7B DPO"
+              >Hermes 2 - Mistral 7B DPO</a
+            >
+            <a href="#" data-model="Hermes 2 Mixtral 8x7B DPO"
+              >Hermes 2 Mixtral 8x7B DPO</a
+            >
+            <a href="#" data-model="Hermes 2 Mixtral 8x7B SFT"
+              >Hermes 2 Mixtral 8x7B SFT</a
+            >
+            <a href="#" data-model="Hermes 2 Theta 8B">Hermes 2 Theta 8B</a>
+            <a href="#" data-model="Hermes 3 70B Instruct"
+              >Hermes 3 70B Instruct</a
+            >
+            <a href="#" data-model="Hermes 3 405B Instruct"
+              >Hermes 3 405B Instruct</a
+            >
+            <a href="#" data-model="Capybara 7B">Capybara 7B</a>
+            <a href="#" data-model="Capybara 70B">Capybara 70B</a>
+            <a href="#" data-model="Alohamora 8B">Alohamora 8B</a>
+            <a href="#" data-model="Dumbledore 13B">Dumbledore 13B</a>
+            <a href="#" data-model="Capybara 34B">Capybara 34B</a>
+            <a href="#" data-model="Hermes 13B">Hermes 13B</a>
+            <a href="#" data-model="NVIDIA Nemotron-4 340B Instruct"
+              >NVIDIA Nemotron-4 340B Instruct</a
+            >
+            <a href="#" data-model="OpenChat 3.5 8B">OpenChat 3.5 8B</a>
+            <a href="#" data-model="OpenChat 3.6 8B">OpenChat 3.6 8B</a>
+            <a href="#" data-model="OpenHermes 2.5 Mistral 7B"
+              >OpenHermes 2.5 Mistral 7B</a
+            >
+            <a href="#" data-model="Mistral OpenOrca 7B">Mistral OpenOrca 7B</a>
+            <a href="#" data-model="Llama3 Sonar 8B Online"
+              >Llama3 Sonar 8B Online</a
+            >
+            <a href="#" data-model="Llama3 Sonar 70B Online"
+              >Llama3 Sonar 70B Online</a
+            >
+            <a href="#" data-model="Llama 3.1 Sonar 8B Online"
+              >Llama 3.1 Sonar 8B Online</a
+            >
+            <a href="#" data-model="Llama 3.1 Sonar 70B Online"
+              >Llama 3.1 Sonar 70B Online</a
+            >
+            <a href="#" data-model="Llama 3.1 Sonar 405B Online"
+              >Llama 3.1 Sonar 405B Online</a
+            >
+            <a href="#" data-model="Phind CodeLlama 34B v2"
+              >Phind CodeLlama 34B v2</a
+            >
+            <a href="#" data-model="StripedHyena Nous 7B"
+              >StripedHyena Nous 7B</a
+            >
+            <a href="#" data-model="Yi 6B">Yi 6B</a>
+            <a href="#" data-model="Yi 34B">Yi 34B</a>
+            <a href="#" data-model="Yi 1.5 34B">Yi 1.5 34B</a>
+            <a href="#" data-model="Yi Large">Yi Large</a>
+            <a href="#" data-model="Yi Large Turbo">Yi Large Turbo</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="chatbotMessages" class="chatbot-messages"></div>
+
+      <div id="optionsBox" class="hidden">
+        <button id="closeOptionsButton">&times;</button>
+        <div class="option">
+          <i class="fa-solid fa-upload"></i>Upload File/Image
+        </div>
+        <div class="option">
+          <i class="fa-solid fa-download"></i>Download Chats
+        </div>
+        <div class="option">
+          <i class="fa-solid fa-microphone"></i>Voice Chat
+        </div>
+        <div class="option">
+          <i class="fa-solid fa-pencil"></i>Handwriting Notes
+        </div>
+        <div class="option">
+          <i class="fa-solid fa-calculator"></i>Math Notes
+        </div>
+        <div class="option"><i class="fa-solid fa-user"></i>AI Humanizer</div>
+        <div class="option">
+          <i class="fa-brands fa-google"></i>
+          <label class="switch">
+            <input type="checkbox" id="googleToggle" />
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+
+      <div id="tonePopup" class="hidden">
+        <button id="closeTonePopup">&times;</button>
+        <h2>Select Tone</h2>
+        <div class="tone-option" data-tone="default">Default</div>
+        <div class="tone-option" data-tone="persuasive">Persuasive</div>
+        <div class="tone-option" data-tone="formal">Formal</div>
+        <div class="tone-option" data-tone="descriptive">Descriptive</div>
+        <div class="tone-option" data-tone="concise">Concise</div>
+        <div class="tone-option" data-tone="friendly">Friendly</div>
+        <div class="tone-option" data-tone="casual">Casual</div>
+        <div class="tone-option" data-tone="professional">Professional</div>
+        <div class="tone-option" data-tone="diplomatic">Diplomatic</div>
+        <div class="tone-option" data-tone="confident">Confident</div>
+        <div class="tone-option" data-tone="academic">Academic</div>
+        <div class="tone-option" data-tone="simplified">Simplified</div>
+        <div class="tone-option" data-tone="bold">Bold</div>
+        <div class="tone-option" data-tone="empathetic">Empathetic</div>
+        <div class="tone-option" data-tone="direct">Direct</div>
+        <div class="tone-option" data-tone="engaging">Engaging</div>
+      </div>
+
+      <div id="langPopup" class="hidden">
+        <button id="closeLangPopup">&times;</button>
+        <h2>Select Preferred Language</h2>
+        <div class="lang-option" data-lang="afrikaans">Afrikaans</div>
+        <div class="lang-option" data-lang="albanian">Albanian</div>
+        <div class="lang-option" data-lang="amharic">Amharic</div>
+        <div class="lang-option" data-lang="arabic">Arabic</div>
+        <div class="lang-option" data-lang="armenian">Armenian</div>
+        <div class="lang-option" data-lang="azerbaijani">Azerbaijani</div>
+        <div class="lang-option" data-lang="bengali">Bengali</div>
+        <div class="lang-option" data-lang="bosnian">Bosnian</div>
+        <div class="lang-option" data-lang="bulgarian">Bulgarian</div>
+        <div class="lang-option" data-lang="chinese (simplified)">
+          Chinese (Simplified)
+        </div>
+        <div class="lang-option" data-lang="catalan">Catalan</div>
+        <div class="lang-option" data-lang="chinese (traditional)">
+          Chinese (Traditional)
+        </div>
+        <div class="lang-option" data-lang="croatian">Croatian</div>
+        <div class="lang-option" data-lang="czech">Czech</div>
+        <div class="lang-option" data-lang="danish">Danish</div>
+        <div class="lang-option" data-lang="dari">Dari</div>
+        <div class="lang-option" data-lang="dutch">Dutch</div>
+        <div class="lang-option" data-lang="english">English</div>
+        <div class="lang-option" data-lang="estonian">Estonian</div>
+        <div class="lang-option" data-lang="finnish">Finnish</div>
+        <div class="lang-option" data-lang="french">French</div>
+        <div class="lang-option" data-lang="french canadian">
+          French Canadian
+        </div>
+        <div class="lang-option" data-lang="georgian">Georgian</div>
+        <div class="lang-option" data-lang="german">German</div>
+        <div class="lang-option" data-lang="greek">Greek</div>
+        <div class="lang-option" data-lang="gujarati">Gujarati</div>
+        <div class="lang-option" data-lang="haitian creole">Haitian Creole</div>
+        <div class="lang-option" data-lang="hausa">Hausa</div>
+        <div class="lang-option" data-lang="hebrew">Hebrew</div>
+        <div class="lang-option" data-lang="hindi">Hindi</div>
+        <div class="lang-option" data-lang="hungarian">Hungarian</div>
+        <div class="lang-option" data-lang="icelandic">Icelandic</div>
+        <div class="lang-option" data-lang="indonesian">Indonesian</div>
+        <div class="lang-option" data-lang="italian">Italian</div>
+        <div class="lang-option" data-lang="japanese">Japanese</div>
+        <div class="lang-option" data-lang="kannada">Kannada</div>
+        <div class="lang-option" data-lang="kazakh">Kazakh</div>
+        <div class="lang-option" data-lang="korean">Korean</div>
+        <div class="lang-option" data-lang="latvian">Latvian</div>
+        <div class="lang-option" data-lang="lithuanian">Lithuanian</div>
+        <div class="lang-option" data-lang="macedonian">Macedonian</div>
+        <div class="lang-option" data-lang="malay">Malay</div>
+        <div class="lang-option" data-lang="malayalam">Malayalam</div>
+        <div class="lang-option" data-lang="maltese">Maltese</div>
+        <div class="lang-option" data-lang="mongolian">Mongolian</div>
+        <div class="lang-option" data-lang="norwegian">Norwegian</div>
+        <div class="lang-option" data-lang="farsi (persian)">
+          Farsi (Persian)
+        </div>
+        <div class="lang-option" data-lang="pashto">Pashto</div>
+        <div class="lang-option" data-lang="polish">Polish</div>
+        <div class="lang-option" data-lang="portuguese">Portuguese</div>
+        <div class="lang-option" data-lang="romanian">Romanian</div>
+        <div class="lang-option" data-lang="russian">Russian</div>
+        <div class="lang-option" data-lang="serbian">Serbian</div>
+        <div class="lang-option" data-lang="sinhala">Sinhala</div>
+        <div class="lang-option" data-lang="slovak">Slovak</div>
+        <div class="lang-option" data-lang="slovenian">Slovenian</div>
+        <div class="lang-option" data-lang="somali">Somali</div>
+        <div class="lang-option" data-lang="spanish">Spanish</div>
+        <div class="lang-option" data-lang="spanish mexican">
+          Spanish Mexican
+        </div>
+        <div class="lang-option" data-lang="swahili">Swahili</div>
+        <div class="lang-option" data-lang="swedish">Swedish</div>
+        <div class="lang-option" data-lang="filipino tagalog">
+          Filipino Tagalog
+        </div>
+        <div class="lang-option" data-lang="tamil">Tamil</div>
+        <div class="lang-option" data-lang="telugu">Telugu</div>
+        <div class="lang-option" data-lang="thai">Thai</div>
+        <div class="lang-option" data-lang="turkish">Turkish</div>
+        <div class="lang-option" data-lang="ukrainian">Ukrainian</div>
+        <div class="lang-option" data-lang="urdu">Urdu</div>
+        <div class="lang-option" data-lang="uzbek">Uzbek</div>
+        <div class="lang-option" data-lang="vietnamese">Vietnamese</div>
+        <div class="lang-option" data-lang="welsh">Welsh</div>
+      </div>
+
+      <div id="wordCountPopup" class="hidden">
+        <button id="closeWordCountPopup">&times;</button>
+        <h2>Set Word Count</h2>
+        <div class="slider-container">
+          <input
+            type="range"
+            id="wordCountSlider"
+            min="0"
+            max="10"
+            step="1"
+            value="0"
+          />
+          <div id="sliderTooltip" class="slider-tooltip">Default</div>
+        </div>
+      </div>
+
+      <div id="chatInputArea">
+        <div id="inputContainer">
+          <button id="bookmarkButton"><i class="fas fa-bookmark"></i></button>
+          <textarea
+            id="chatbotInput"
+            placeholder="Type your message"
+          ></textarea>
+
+          <button id="ellipsisButton">
+            <i class="fa fa-ellipsis-h"></i>
+          </button>
+          <button id="sendButton">
+            <i class="fas fa-paper-plane"></i>
+            <i class="fas fa-spinner fa-pulse" style="display: none"></i>
+            <p id="timer" style="display: none; font-size: 12px"></p>
+
+            <p></p>
+          </button>
+        </div>
+
+        <p>
+          This generation will cost
+          <span id="initialCreditBalance"></span> credit(s). You have
+          <span id="creditbalance"></span> credits left.
+          <a href="https://app.ai4chat.co/pricing-user">Need more credits?</a>
+        </p>
+      </div>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
