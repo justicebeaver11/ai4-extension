@@ -1689,13 +1689,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   
  
 
+
+
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "transcriptReady") {
-      // Retrieve the stored transcript from chrome storage
       chrome.storage.local.get("transcriptData", (result) => {
         if (result.transcriptData) {
-          console.log("Transcript data received in popup:", result.transcriptData);
-  
           const transcriptSegments = result.transcriptData.split("\n");
           const parsedTranscript = transcriptSegments.map(segment => {
             const [timestamp, ...textParts] = segment.split(" - ");
@@ -1703,14 +1702,21 @@ document.addEventListener("DOMContentLoaded", async () => {
             return { duration: timestamp, text: text };
           });
   
-          const transcriptDetails = parsedTranscript
+          let transcriptDetails = parsedTranscript
             .map(entry => `At ${entry.duration}, the text was: "${entry.text || "N/A"}"`)
             .join("\n");
   
-          const transcriptContext = `Here is the transcript of the video along with timestamps: \n${transcriptDetails}. Please use this context for further conversation so that the user can ask questions related to specific timestamps or the entire transcript and adhere strictly to this context.`;
+          let transcriptContext;
+  
+          if (message.action === "chat") {
+            transcriptContext = `Here is the transcript of the video along with timestamps: \n${transcriptDetails}. Please use this context for further conversation so that the user can ask questions related to specific timestamps or the entire transcript and adhere strictly to this context.`;
+            localStorage.setItem("youtubeChatMode", "true");
+          } else if (message.action === "summarize") {
+            transcriptContext = `Please provide a summary of the video based on the following transcript: \n${transcriptDetails}. Focus on the main points discussed in the video.`;
+            localStorage.setItem("youtubeChatMode", "false");
+          }
   
           localStorage.setItem("youtubeChatContent", transcriptContext);
-          localStorage.setItem("youtubeChatMode", "true");
   
           // Send the formatted transcript to the chatbot
           sendMessageToChatbot(transcriptContext);
@@ -1720,6 +1726,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
   });
+  
+  
   
 
 

@@ -92,6 +92,12 @@ chrome.commands.onCommand.addListener((command) => {
   }
 });
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "openPopup") {
+    openMovablePopup();
+  }
+});
+
 let previousTabUrl = null;
 
 chrome.tabs.onActivated.addListener((activeInfo) => {
