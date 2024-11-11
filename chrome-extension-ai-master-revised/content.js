@@ -432,15 +432,23 @@ window.addEventListener("load", function () {
   const transcriptButton = await findTranscriptButton();
   if (transcriptButton) {
     const chatButton = document.createElement("button");
-    chatButton.innerText = "Chat with YouTube";
-    chatButton.style.cssText = "margin-left: 10px; padding: 8px 16px; background-color: #FF0000; color: #FFFFFF; border: none; border-radius: 4px; cursor: pointer;";
+    chatButton.innerText = "Chat with Video";
+    chatButton.style.cssText = "padding: 4px 12px; background-color: #FF0000; color: #FFFFFF; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;";
 
     const summarizeButton = document.createElement("button");
     summarizeButton.innerText = "Summarize Video";
-    summarizeButton.style.cssText = "margin-left: 10px; padding: 8px 16px; background-color: #FF5733; color: #FFFFFF; border: none; border-radius: 4px; cursor: pointer;";
+    summarizeButton.style.cssText = "padding: 4px 8px; background-color: #FF5733; color: #FFFFFF; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;";
 
-    transcriptButton.parentNode.insertBefore(chatButton, transcriptButton.nextSibling);
-    transcriptButton.parentNode.insertBefore(summarizeButton, chatButton.nextSibling);
+    const buttonContainer = document.createElement("div");
+    buttonContainer.style.cssText = "display: flex; gap: 5px; margin-top: 10px;";
+
+    buttonContainer.appendChild(chatButton);
+    buttonContainer.appendChild(summarizeButton);
+
+    const subscribeButtonContainer = document.querySelector("#subscribe-button");
+    if (subscribeButtonContainer) {
+      subscribeButtonContainer.parentNode.insertBefore(buttonContainer, subscribeButtonContainer.nextSibling);
+    }
 
     const retrieveTranscript = async (actionType) => {
       transcriptButton.click();
@@ -478,58 +486,11 @@ window.addEventListener("load", function () {
 
 
 
-// (async function() {
-//   const findTranscriptButton = async () => {
-//     for (let i = 0; i < 6; i++) {
-//       const button = Array.from(document.querySelectorAll("button"))
-//         .find(button => button.innerText.trim() === "Show transcript");
-//       if (button) return button;
-//       await new Promise(resolve => setTimeout(resolve, 500));
-//     }
-//     console.log("Transcript button not found.");
-//     return null;
-//   };
 
-//   const transcriptButton = await findTranscriptButton();
-//   if (transcriptButton) {
-//     const chatButton = document.createElement("button");
-//     chatButton.innerText = "Chat with YouTube";
-//     chatButton.style.cssText = "margin-left: 10px; padding: 8px 16px; background-color: #FF0000; color: #FFFFFF; border: none; border-radius: 4px; cursor: pointer;";
 
-//     const summarizeButton = document.createElement("button");
-//     summarizeButton.innerText = "Summarize Video";
-//     summarizeButton.style.cssText = "margin-left: 10px; padding: 8px 16px; background-color: #FF5733; color: #FFFFFF; border: none; border-radius: 4px; cursor: pointer;";
 
-//     transcriptButton.parentNode.insertBefore(chatButton, transcriptButton.nextSibling);
-//     transcriptButton.parentNode.insertBefore(summarizeButton, chatButton.nextSibling);
 
-//     const retrieveTranscript = async (actionType) => {
-//       transcriptButton.click();
-//       await new Promise(resolve => setTimeout(resolve, 1000));
-//       const transcriptElements = document.querySelectorAll("ytd-transcript-segment-renderer");
-//       if (transcriptElements.length > 0) {
-//         const transcript = Array.from(transcriptElements).map(el => {
-//           const time = el.querySelector(".segment-timestamp").innerText;
-//           const text = el.querySelector(".segment-text").innerText;
-//           return `${time} - ${text}`;
-//         }).join("\n");
 
-//         chrome.storage.local.set({ transcriptData: transcript });
-//         chrome.runtime.sendMessage({ type: "transcriptReady", action: actionType });
-//       } else {
-//         console.log("Transcript not available or failed to load.");
-//       }
-//     };
-
-//     chatButton.addEventListener("click", () => {
-//       retrieveTranscript("chat");
-//     });
-
-//     summarizeButton.addEventListener("click", () => {
-//       retrieveTranscript("summarize");
-//     });
-//   }
-// })();
 
 
 
